@@ -3,8 +3,7 @@
 
   Modify a given request to utilize mod_proxy for reverse proxying.
 --]]
-function set_reverse_proxy(r, conn)
-  -- check if request was from a secure path
+function set_reverse_proxy(r, conn, userhost)
   local use_ssl = r.subprocess_env['OOD_SECURE_UPSTREAM'] == '1'
 
   -- find protocol used by parsing the request headers and SSL flag
@@ -18,6 +17,8 @@ function set_reverse_proxy(r, conn)
   -- define reverse proxy destination using connection object
   if conn.socket then
     r.handler = "proxy:unix:" .. conn.socket .. "|" .. protocol .. "localhost"
+  elseif userhost then
+    r.handler = "proxy:" .. protocol .. conn.user .. "." .. conn.server
   else
     r.handler = "proxy:" .. protocol .. conn.server
   end

@@ -292,6 +292,12 @@
 # Default: [] (no additional SSL proxy settings)
 #ssl_proxy: []
 
+# Whether to reverse proxy to backend nodes using user-specific subdomain
+# Examples:
+#     node_proxy_userhost: true
+# Default: false (disable this feature)
+#proxy_userhost: false
+
 #
 # Per-user NGINX Passenger apps
 #
