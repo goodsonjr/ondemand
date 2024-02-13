@@ -6,7 +6,7 @@
 
 function find_routes(r, database, user)
   
-  local statement, err = database:prepare(r, "SELECT in_port, node, out_port, access_time FROM `routes` WHERE `user` IS %s")
+  local statement, err = database:prepare(r, "SELECT in_port, node, out_port, access_time, secure, userhost FROM `routes` WHERE `user` IS %s")
   if not err then
     local result, errmsg = statement:select(user)
     if not errmsg then
@@ -102,7 +102,7 @@ function dump(o)
   end
 end
 
-function setup(r, user, node, out_port, min_port, max_port)
+function setup(r, user, node, out_port, min_port, max_port, secure_backend, user_host)
   local dbpath = r.subprocess_env['OOD_DNODE_DBPATH']
 
   -- Open database for user-specific routes endpoints
@@ -127,6 +127,8 @@ function setup(r, user, node, out_port, min_port, max_port)
           node TEXT,
           out_port INTEGER,
           access_time REAL,
+          secure INT,
+          userhost INT,
           UNIQUE(user, in_port) ON CONFLICT REPLACE,
           UNIQUE(user, node, out_port) ON CONFLICT REPLACE
         )
@@ -136,7 +138,7 @@ function setup(r, user, node, out_port, min_port, max_port)
     r:ivm_set("ROUTE_DATABASE_INITIALIZED", "yes")
   end
   
-  local insert, err = database:prepare(r, "INSERT INTO routes VALUES (%s, %u, %s, %u, %f)")
+  local insert, err = database:prepare(r, "INSERT INTO routes VALUES (%s, %u, %s, %u, %f, %d, %d)")
   
   if not err then 
     -- Select incoming port for this routes, selected oldest existing if all are taken
@@ -144,7 +146,7 @@ function setup(r, user, node, out_port, min_port, max_port)
     
 
     -- If (user, in_port) exists, DB constraint will overwrite it, updating access time
-    local _, errmsg = insert:query(user, in_port, node, out_port, r:clock())
+    local _, errmsg = insert:query(user, in_port, node, out_port, r:clock(), secure_backend, user_host)
 
     -- Close the database so we don't accumulate connections
     database:close()
@@ -188,6 +190,8 @@ function map(r, user, in_port)
 
         -- Construct host:port combo
         route_dest = row[2] .. ":" .. row[3]
+        secure = row[5]
+        userhost = row[6]
       end
     end
   end
@@ -198,7 +202,7 @@ function map(r, user, in_port)
   local time_route_map = (r:clock() - now)/1000.0
   r:debug("Mapped '" .. user .. " on " .. r.port .. "' => '" .. route_dest .. "' [" .. time_route_map .. " ms]")
 
-  return route_dest
+  return route_dest, secure, userhost
 end
 
 return {

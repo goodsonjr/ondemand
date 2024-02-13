@@ -286,6 +286,17 @@
 # Default: /var/www/ood/db/proxy.db
 #dnode_dbpath: "/var/www/ood/db/proxy.db"
 
+# List of SSLProxy Apache directives for secure reverse proxy
+#
+# Example:
+#     ssl_proxy:
+#       - 'SSLProxyCACertificateFile "/etc/pki/tls/certs/node_CA.crt"'
+#       - 'SSLProxyCipherSuite EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH'
+#       - 'SSLProxyMachineCertificateFile "/etc/pki/tls/certs/ondemand-proxy.crt"'
+#       - 'SSLProxyProtocol +TLSv1.1 +TLSv1.2 +TLSv1.3'
+# Default: null (no reverse proxy SSL support)
+#ssl_proxy: null
+
 #
 # Per-user NGINX Passenger apps
 #

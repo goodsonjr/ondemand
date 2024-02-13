@@ -19,6 +19,8 @@ function dyn_setup_handler(r)
   local proxy_host      = r.subprocess_env['OOD_DNODE_HOSTNAME']
   local dnode_port_lo   = r.subprocess_env['OOD_DNODE_PORT_START']
   local dnode_port_hi   = r.subprocess_env['OOD_DNODE_PORT_END']
+  local secure_backend  = r.subprocess_env['OOD_SECURE_NODE_PROXY']
+  local user_host       = r.subprocess_env['OOD_SECURE_USERHOST']
 
   -- read in <LocationMatch> regular expression captures
   local host = r.subprocess_env['MATCH_HOST']
@@ -31,7 +33,7 @@ function dyn_setup_handler(r)
   end
 
   -- Set up the dynamic proxy backend
-  local proxy_port = dnode.setup(r, user, host, port, dnode_port_lo, dnode_port_hi)
+  local proxy_port = dnode.setup(r, user, host, port, dnode_port_lo, dnode_port_hi, secure_backend, user_host)
   
   if not proxy_port then
     -- Something went wrong, return error
