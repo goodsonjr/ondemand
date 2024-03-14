@@ -261,6 +261,31 @@
 # Default: null (disable this feature)
 #rnode_uri: null
 
+# Sub-uri used to reverse proxy to backend web server using dynamic, alt-port routing
+# Example:
+#     dnode_uri: '/dnode'
+# Default: null (disable this feature)
+#dnode_uri: null
+
+# First alternative port for dynamic alt-port dnode routing
+# Example:
+#     dnode_min_port: 10000
+# Default: 10000
+#dnode_min_port: 10000
+
+# Last alternative port for dynamic alt-port dnode routing
+# Example:
+#     dnode_max_port: 10004
+# Default: 10004
+#dnode_max_port: 10004
+
+# Path for sqlite3 database for dnode alt-port route storage_file
+# Unused if using Lua extension module for route handling
+# Example:
+#     dnode_dbpath: "/var/www/ood/db/proxy.db"
+# Default: /var/www/ood/db/proxy.db
+#dnode_dbpath: "/var/www/ood/db/proxy.db"
+
 #
 # Per-user NGINX Passenger apps
 #
