@@ -105,6 +105,7 @@ Listen 8080
   SetEnv OOD_USER_MAP_CMD "/opt/my_user_map_cmd"
   SetEnv OOD_USER_ENV "OIDC_CLAIM_preferred_username"
   SetEnv OOD_MAP_FAIL_URI "/register"
+  SetEnv OOD_COERCE_USERNAME_LOWER true
 
   # Per-user Nginx (PUN) configuration
   # NB: Apache will need sudo privs to control the PUNs

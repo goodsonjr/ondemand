@@ -18,6 +18,7 @@ function pun_proxy_handler(r)
   local pun_socket_root       = r.subprocess_env['OOD_PUN_SOCKET_ROOT']
   local nginx_uri             = r.subprocess_env['OOD_NGINX_URI']
   local map_fail_uri          = r.subprocess_env['OOD_MAP_FAIL_URI']
+  local coerce_user           = r.subprocess_env['OOD_COERCE_USERNAME_LOWER']
   local pun_stage_cmd         = r.subprocess_env['OOD_PUN_STAGE_CMD']
   local pun_pre_hook_exports  = r.subprocess_env['OOD_PUN_PRE_HOOK_EXPORTS']
   local pun_pre_hook_root_cmd = r.subprocess_env['OOD_PUN_PRE_HOOK_ROOT_CMD']
@@ -25,7 +26,7 @@ function pun_proxy_handler(r)
   local pun_max_retries       = tonumber(r.subprocess_env['OOD_PUN_MAX_RETRIES'])
 
   -- get the system-level user name
-  local user = user_map.map(r, user_map_match, user_map_cmd, user_env and r.subprocess_env[user_env] or r.user)
+  local user = user_map.map(r, user_map_match, user_map_cmd, user_env and r.subprocess_env[user_env] or r.user, coerce_user)
   if not user then
     if map_fail_uri then
       return http.http302(r, map_fail_uri .. "?redir=" .. r:escape(r.unparsed_uri))

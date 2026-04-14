@@ -36,7 +36,7 @@ end
   Given a request and authenticated user, map this user to a system-level user
   using the supplied match string or shell command.
 --]]
-function map(r, user_map_match, user_map_cmd, remote_user)
+function map(r, user_map_match, user_map_cmd, remote_user, coerce_user)
   local now = r:clock()
   local sys_user = ""
   -- match string
@@ -57,6 +57,11 @@ function map(r, user_map_match, user_map_cmd, remote_user)
   end
 
   sys_user = actual_username(sys_user)
+
+  -- coerce user to lowercase if requested
+  if coerce_user then
+    sys_user = string.lower(sys_user)
+  end
 
   time_user_map = (r:clock() - now)/1000.0
   r:debug("Mapped '" .. remote_user .. "' => '" .. (sys_user or "") .. "' [" .. time_user_map .. " ms]")

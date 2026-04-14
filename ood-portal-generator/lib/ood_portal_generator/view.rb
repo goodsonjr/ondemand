@@ -47,6 +47,7 @@ module OodPortalGenerator
       @user_map_match   = @user_map_cmd ? nil : opts.fetch(:user_map_match, ".*")
       @user_env         = opts.fetch(:user_env, nil)
       @map_fail_uri     = opts.fetch(:map_fail_uri, nil)
+      @coerce_username  = opts.fetch(:coerce_username, false)
       @pun_stage_cmd    = opts.fetch(:pun_stage_cmd, "sudo /opt/ood/nginx_stage/sbin/nginx_stage")
 
       # custom directives

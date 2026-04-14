@@ -204,6 +204,9 @@ Listen <%= addr_port %>
   <%- if @map_fail_uri -%>
   SetEnv OOD_MAP_FAIL_URI "<%= @map_fail_uri %>"
   <%- end -%>
+  <%- if @coerce_username -%>
+  SetEnv OOD_COERCE_USERNAME_LOWER true
+  <%- end -%>
 
   # Per-user Nginx (PUN) configuration
   # NB: Apache will need sudo privs to control the PUNs

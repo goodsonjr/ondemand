@@ -137,6 +137,12 @@ user_env: OIDC_CLAIM_preferred_username
 # Default: null (don't redirect, just display error message)
 map_fail_uri: '/register'
 
+# Coerce system usernames to lowercase 
+# Example:
+#     coerce_username: true
+# Default: false (leave username as returned by user_map_[match|cmd])
+coerce_username: false
+
 # System command used to run the `nginx_stage` script with sudo privileges
 # Example:
 #     pun_stage_cmd: 'sudo /path/to/nginx_stage'
